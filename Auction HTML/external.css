@@ -1,0 +1,91 @@
+.fcontainer {
+    background-color: white;
+    font-size: 20px;
+    display: flex;
+    height: 2cm;
+    width: 39.7cm;
+    justify-content: center;
+    padding: 5px;
+  }
+  
+  .login {
+    background-color: white;
+    font-size: 20px;
+    display: flex;
+    height: 0.5cm;
+    width: 39.7cm;
+    justify-content: right;
+    padding: 5px;
+  }
+  
+  .fitem1,
+  .fitem2,
+  .fitem3,
+  .fitem4 {
+    color: rgb(86, 49, 41);
+    margin: 10px;
+    margin-left: 1px;
+    padding: 15px;
+    flex-grow: 0.5;
+    order: 1;
+    height: 1px;
+    text-align: right;
+  }
+
+  .fitem1:hover{text-decoration: underline;}
+  .fitem2:hover{text-decoration: underline;}
+  .fitem3:hover{text-decoration: underline;}
+  .fitem4:hover{text-decoration: underline;}
+
+  .fitem4{margin-right: 200px;}
+  
+  .fitem5 {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    flex-grow: 1;
+    order:0;
+    padding: 15px;
+  }
+  
+  .fitem6 {
+    flex-grow: 0.2;
+    order: 3;
+    padding: 15px;
+    width: 1px;
+    height: 1px;
+  }
+  
+  .fitem7 {
+    flex-grow: 0;
+    order: 2;
+    height: 45px;
+    color: rgb(176, 175, 175);
+  }
+  
+  .fitem7 input[type="text"] {
+    width: 350px; 
+    height: 30px; 
+    font-size: 15px;
+  }
+
+  /* VIDEO OF CURRENT LIVE AUCTION DISPLAY */
+  
+.fcontainer2{
+    background-color: rgb(218, 217, 215);
+    font-size: 20px;
+    display: flex;
+    height: 15cm;
+    width: 39.7cm;
+    padding: 5px;}
+
+.fcontainer2:hover{background-color:rgb(207, 206, 202) ;}
+
+.painting{
+    order: 3;
+    flex-grow: 0;}
+
+.text1{
+    order: 1;
+    flex-grow: 3;}
