@@ -19,7 +19,7 @@ body {
     font-size: 20px;
     display: flex;
     height: 0.5cm;
-    width: 39.7cm;
+    width: 97%;
     justify-content: right;
     padding: 5px;
   }
@@ -298,3 +298,4 @@ body {
 .i3 img:hover{transform: scale(0.9)}
 .i4 img:hover{transform: scale(0.9)}
 .i5 img:hover{transform: scale(0.9)}
+
