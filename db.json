@@ -1,0 +1,67 @@
+{
+  "users": [
+    {
+      "id": "7e1d",
+      "email": "satyampruthi@gmail.com",
+      "password": "Satyam@134"
+    },
+    {
+      "id": "545b",
+      "email": "rohitkumar@gmail.com",
+      "password": "Rohit@123"
+    },
+    {
+      "id": "4c35",
+      "email": "rohitkumar@gmail.com",
+      "password": "Rohit@123"
+    },
+    {
+      "id": "5558",
+      "username": "Satyam",
+      "email": "Satyampruthi@gmail.com",
+      "password": "Staym@134"
+    },
+    {
+      "id": "bb9e",
+      "username": "Rohit",
+      "email": "rohitkumar12@gmail.com",
+      "password": "rohit@123"
+    },
+    {
+      "id": "00dc",
+      "username": "momo",
+      "email": "momo133@gmail.com",
+      "password": "momo@234"
+    },
+    {
+      "id": "7a06",
+      "username": "satyam1207",
+      "email": "satyam1207.be23@chitkara.edu.in",
+      "password": "satyam@156"
+    },
+    {
+      "id": "a2cd",
+      "username": "satyam",
+      "email": "sattu234@gmail.com",
+      "password": "sat345"
+    },
+    {
+      "id": "8645",
+      "username": "satyam",
+      "email": "satt123@gmail.com",
+      "password": "Satyam@1223"
+    },
+    {
+      "id": "4267",
+      "username": "satyam123",
+      "email": "satyam123@gmail.com",
+      "password": "Satyam@234"
+    },
+    {
+      "id": "4525",
+      "username": "frontend",
+      "email": "frontend123@gmail.com",
+      "password": "987654"
+    }
+  ]
+}

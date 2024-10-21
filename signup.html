@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Sign Up</title>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="container main">
+        <div class="row">
+            <div class="col-md-6 side-image">
+                <img src="logo.png" alt="">
+                <div class="text">
+                    <p>Welcome to the shoe's arena  <i>- The Shoe Plaza</i></p>
+                </div>
+            </div>
+            <div class="col-md-6 right">
+                <div class="input-box">
+                    <header>Create account</header>
+                    <div class="input-field">
+                        <input type="text" class="input" id="username" required autocomplete="off">
+                        <label for="username">Username</label>
+                        <span class="error-message" id="username-error"></span>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" class="input" id="email" required autocomplete="off">
+                        <label for="email">Email</label>
+                        <span class="error-message" id="email-error"></span>
+                    </div>
+                    <div class="input-field">
+                        <input type="password" class="input" id="pass" required>
+                        <label for="pass">Password</label>
+                        <span class="error-message" id="pass-error"></span>
+                    </div>
+                    <div class="input-field">
+                        <input type="password" class="input" id="confirm-pass" required>
+                        <label for="confirm-pass">Confirm Password</label>
+                        <span class="error-message" id="confirm-pass-error"></span>
+                    </div>
+                    <div class="input-field">
+                        <input type="submit" class="submit" value="Sign Up" onclick="validateForm()">
+                    </div>
+                    <div class="signin">
+                        <span>Already have an account? <a href="#">Log in here</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  <script>
+    
+    function toLowerCaseEmail() {
+    let emailField = document.getElementById("email");
+    emailField.value = emailField.value.toLowerCase();
+}
+
+async function validateForm() {
+    let username = document.getElementById("username").value;
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("pass").value;
+    let confirmPassword = document.getElementById("confirm-pass").value;
+    let usernameError = document.getElementById("username-error");
+    let emailError = document.getElementById("email-error");
+    let passError = document.getElementById("pass-error");
+    let confirmPassError = document.getElementById("confirm-pass-error");
+
+    // Clear previous error messages
+    usernameError.textContent = "";
+    emailError.textContent = "";
+    passError.textContent = "";
+    confirmPassError.textContent = "";
+
+    let valid = true;
+
+    // Username validation
+    if (username.trim() === "") {
+        usernameError.textContent = "Please enter a username.";
+        usernameError.style.color = "red";
+        valid = false;
+    }
+
+    // Email validation
+    if (email === "") {
+        emailError.textContent = "Email cannot be empty.";
+        emailError.style.color = "red";
+        valid = false;
+    } else if (!validateEmail(email)) {
+        emailError.textContent = "Please enter a valid email address in lowercase.";
+        emailError.style.color = "red";
+        valid = false;
+    }
+
+    // Password validation
+    if (password === "") {
+        passError.textContent = "Password cannot be empty.";
+        passError.style.color = "red";
+        valid = false;
+    } else if (password.length < 6) {
+        passError.textContent = "Password must be at least 6 characters long.";
+        passError.style.color = "red";
+        valid = false;
+    }
+
+    // Confirm Password validation
+    if (confirmPassword === "") {
+        confirmPassError.textContent = "Please confirm your password.";
+        confirmPassError.style.color = "red";
+        valid = false;
+    } else if (password !== confirmPassword) {
+        confirmPassError.textContent = "Passwords do not match.";
+        confirmPassError.style.color = "red";
+        valid = false;
+    }
+
+    // Proceed if all validations are passed
+    if (valid) {
+        let emailExists = await checkUserByEmail(email);
+        // let usernameExists = await checkUserByUsername(username);
+        if (emailExists) {
+            alert("Already registered with this email. Please log in.");
+        } 
+        // else if (usernameExists) {
+        //      alert("Username already exists.");
+        //  } 
+        else {
+            let registerResponse = await registerUser (username, email, password);
+            if (registerResponse) {
+                alert("Successfully registered!");
+                fetchData();
+            } else {
+                alert("Failed to register. Please try again.");
+            }
+        }
+    }
+}
+
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\\.,;:\s@\"]+\.)+[^<>()[\]\\.,;:\s@\"]{2,})$/i;
+    return re.test(String(email).toLowerCase());
+}
+
+async function checkUserByEmail(email) {
+    try {
+        let response = await fetch(`http://localhost:3000/users?email=${email}`);
+        let data = await response.json();
+        return data.length > 0;
+    } catch (error) {
+        console.error("Error:", error);
+        return false;
+    }
+}
+
+// async function checkUserByUsername(username) {
+//     try {
+//         let response = await fetch(`http://localhost:3000/users?username=${username}`);
+//         let data = await response.json();
+//         return data.length > 0;
+//     } catch (error) {
+//         console.error("Error:", error);
+//         return false;
+//     }
+// }
+
+async function registerUser (username, email, password) {
+    try {
+        let response = await fetch("http://localhost:3000/users", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ username: username, email: email, password: password })
+        });
+        return response.ok;
+    } catch (error) {
+        console.error("Error:", error);
+        return false;
+    }
+}
+      
+    async function fetchData() {
+        try {
+            let response = await fetch("http://localhost:3000/users");
+            let data = await response.json();
+            console.log(data); // Handle your data here
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    async function updateUser(userId, updatedData) {
+        try {
+            let response = await fetch(`http://localhost:3000/users/${userId}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(updatedData)
+            });
+            if (response.ok) {
+                console.log("User updated successfully");
+            } else {
+                console.error("Failed to update user");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+  </script>
+</body>
+</html>
