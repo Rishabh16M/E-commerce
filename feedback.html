@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Footwear Feedback Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"], 
+        select, 
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #4cae4c;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchFeedbackData();
+        });
+
+        function fetchFeedbackData() {
+            fetch('new.json')
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        const lastFeedback = data[data.length - 1];
+                        document.getElementById('name').value = lastFeedback.name;
+                        document.getElementById('email').value = lastFeedback.email;
+                        document.getElementById('rating').value = lastFeedback.rating;
+                        document.getElementById('comments').value = lastFeedback.comments;
+                    }
+                })
+                .catch(error => console.error('Error fetching feedback data:', error));
+        }
+
+        function validateForm() {
+            var name = document.forms["feedbackForm"]["name"].value;
+            var email = document.forms["feedbackForm"]["email"].value;
+            var rating = document.forms["feedbackForm"]["rating"].value;
+            var comments = document.forms["feedbackForm"]["comments"].value;
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (name === "") {
+                alert("Name must be filled out");
+                return false;
+            }
+            if (email === "" || !emailPattern.test(email)) {
+                alert("Please enter a valid email address");
+                return false;
+            }
+            if (rating === "") {
+                alert("Please select a rating");
+                return false;
+            }
+            if (comments === "") {
+                alert("Please enter your comments");
+                return false;
+            }
+            return true;
+        }
+
+        async function submitForm(event) {
+            event.preventDefault();
+            if (validateForm()) {
+                const formData = new FormData(document.forms["feedbackForm"]);
+                const jsonData = JSON.stringify(Object.fromEntries(formData.entries()));
+                try {
+                    const response = await fetch('http://localhost:3000/feedbackForm', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: jsonData
+                    });
+                    const result = await response.json();
+                    alert(result.message);
+                } catch (error) {
+                    console.error('Error submitting form:', error);
+                    alert('There was an error submitting your feedback. Please try again later.');
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Feedback Form</h2>
+    <form name="feedbackForm" onsubmit="submitForm(event)">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name"><br><br>
+
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email"><br><br>
+
+        <label for="rating">Rating:</label>
+        <select id="rating" name="rating">
+            <option value="">--Select--</option>
+            <option value="5">5 - Excellent</option>
+            <option value="4">4 - Good</option>
+            <option value="3">3 - Average</option>
+            <option value="2">2 - Poor</option>
+            <option value="1">1 - Terrible</option>
+        </select><br><br>
+
+        <label for="comments">Comments:</label>
+        <textarea id="comments" name="comments"></textarea><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
