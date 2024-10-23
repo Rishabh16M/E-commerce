@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Login</title>
+    <style>
+        .error-message {
+            color: red; /* Ensure error messages are red */
+            font-size: 0.875em; /* Optional: adjust font size */
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="container main">
+            <div class="row">
+                <div class="col-md-6 side-image">
+                    <img src="images-removebg-preview.png" alt="">
+                    <div class="text">
+                        <p>Welcome to the shoe's arena <i>- The Shoe Plaza</i></p>
+                    </div>
+                </div>
+                <div class="col-md-6 right">
+                    <div class="input-box">
+                        <header>Login!</header>
+                        <div class="input-field">
+                            <input type="text" class="input" id="email" required autocomplete="off">
+                            <label for="email">Email</label>
+                            <span class="error-message" id="email-error"></span>
+                        </div>
+                        <div class="input-field">
+                            <input type="password" class="input" id="pass" required>
+                            <label for="pass">Password</label>
+                            <span class="error-message" id="pass-error"></span>
+                        </div>
+                        <div class="input-field">
+                            <input type="submit" class="submit" value="Login" onclick="validateLogin()">
+                        </div>
+                        <div class="signin">
+                            <span>New customer <a href="signup.html">Sign up now!</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        async function validateLogin() {
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("pass").value;
+    let emailError = document.getElementById("email-error");
+    let passError = document.getElementById("pass-error");
+
+    // Clear previous error messages
+    emailError.textContent = "";
+    passError.textContent = "";
+
+    let valid = true;
+
+    // Email validation
+    if (email === "") {
+        emailError.textContent = "Email cannot be empty.";
+        emailError.style.color = "red";
+        valid = false;
+    } else if (!validateEmail(email)) {
+        emailError.textContent = "Please enter a valid email address.";
+        emailError.style.color = "red";
+        valid = false;
+    }
+
+    // Password validation
+    if (password === "") {
+        passError.textContent = "Password cannot be empty.";
+        passError.style.color = "red";
+        valid = false;
+    }
+
+    // Proceed if all validations are passed
+    if (valid) {
+        let userExists = await checkUser (email, password);
+        if (userExists) {
+            alert("Login successful!");
+            // Redirect to homepage or perform desired action
+            window.location.href = "homepage.html";
+        } else {
+            alert("Invalid email or password. Please try again.");
+        }
+    }
+}
+
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\\.,;:\s@\"]+\.)+[^<>()[\]\\.,;:\s@\"]{2,})$/i;
+    return re.test(String(email).toLowerCase());
+}
+
+async function checkUser (email, password) {
+    try {
+        let response = await fetch(`http://localhost:3000/users?email=${email}`);
+        let data = await response.json();
+
+        // Check if user exists and password matches
+        if (data.length > 0) {
+            // Assuming password is stored in plain text for this example
+            return data[0].password === password;
+        }
+        return false;
+    } catch (error) {
+        console.error("Error:", error);
+        return false;
+    }
+}
+    </script>
+</body>
+
+</html>
